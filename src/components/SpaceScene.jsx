@@ -6,8 +6,8 @@ import { EffectComposer, Bloom } from "@react-three/postprocessing";
 import { Planet, SunObject } from "./Planets/Earth.jsx"
 
 const Planets = [
-    {name: "Sun", place: "Home", texture: "#d4a944", size: 2.7, position: [2, 0, 0], CameraPosition: [0, 0, 5]},
-    {name: "Mercury", place: "About", texture: "/Mercury.jpg", size: 1.9, position: [-10, 0, -16], CameraPosition: [-12, 0, -11]},
+    {name: "Sun", place: "Home", texture: "/Sun.jpg", size: 2.7, position: [2, 0, 0], CameraPosition: [0, 0, 5]},
+    {name: "Mercury", place: "About", texture: "/Mercury.jpg", size: 1.9, position: [-10, 0, -16], CameraPosition: [-6.5, 0, -11]},
     {name: "Venus", place: "Experience", texture: "/Venus.jpg", size: 1.7, position: [-60, 0, -50], CameraPosition: [-62, 0, -45]},
     {name: "Earth", place: "Projects", texture: "/Earth.jpg", size: 2.1, position: [-30, 0, -60], CameraPosition: [-32, 0, -55]},
     {name: "Mars", place: "Skills", texture: "/Mars.jpg", size: 2, position: [-80, 0, -70], CameraPosition: [-82, 0, -65]},
@@ -68,11 +68,6 @@ export default function SpaceScene({Place}) {
             {/* Color and lighting */}
             <ambientLight intensity={0.01} />
 
-            <directionalLight
-            position={[1, 1, 1]}
-            intensity={2}
-            />
-
             <Stars
                 radius={140}
                 depth={50}
@@ -93,12 +88,12 @@ export default function SpaceScene({Place}) {
             <SunObject
             size={Sun.size}
             position={Sun.position}
-            color={Sun.texture}
+            textureurl={Sun.texture}
             speed={0.001}
             />
             <EffectComposer>
                 <Bloom
-                    intensity={1.5}
+                    intensity={1.2}
                     luminanceThreshold={0.3}
                     luminanceSmoothing={0.2}
                     mipmapBlur
