@@ -25,15 +25,10 @@ export default function NavBar({State}) {
                     About Me
                 </Link>
 
-                <a className="text-sm text-gray-300 transition duration-300 hover:text-cyan-400 cursor-pointer"
-                onClick={()=> State("Experience")}>
-                    Experience
-                </a>
-
-                <a className="text-sm text-gray-300 transition duration-300 hover:text-cyan-400 cursor-pointer"
+                <Link to="Projects" className="text-sm text-gray-300 transition duration-300 hover:text-cyan-400 cursor-pointer"
                 onClick={()=> State("Projects")}>
                     Projects
-                </a>
+                </Link>
 
                 <a className="text-sm text-gray-300 transition duration-300 hover:text-cyan-400 cursor-pointer"
                 onClick={()=> State("Skills")}>

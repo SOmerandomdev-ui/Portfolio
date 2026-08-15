@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client'
 import { createBrowserRouter, RouterProvider } from "react-router";
 import Home from "./components/information/Home.jsx"
 import About from "./components/information/AboutMe.jsx"
+import Projects from "./components/information/Projects.jsx"
 import './index.css'
 import App from './App.jsx'
 
@@ -19,6 +20,11 @@ const router = createBrowserRouter([
       {
         path: "/About",
         element: <About/>,
+      },
+
+      {
+        path: "/Projects",
+        element: <Projects/>
       }
     ]
   },

@@ -8,10 +8,9 @@ import { Planet, SunObject } from "./Planets/Earth.jsx"
 const Planets = [
     {name: "Sun", place: "Home", texture: "/Sun.jpg", size: 2.7, position: [2, 0, 0], CameraPosition: [0, 0, 5]},
     {name: "Mercury", place: "About", texture: "/Mercury.jpg", size: 1.9, position: [-10, 0, -16], CameraPosition: [-6.5, 0, -11]},
-    {name: "Venus", place: "Experience", texture: "/Venus.jpg", size: 1.7, position: [-60, 0, -50], CameraPosition: [-62, 0, -45]},
-    {name: "Earth", place: "Projects", texture: "/Earth.jpg", size: 2.1, position: [-30, 0, -60], CameraPosition: [-32, 0, -55]},
+    {name: "Venus", place: "Projects", texture: "/Venus.jpg", size: 1.7, position: [-60, 0, -50], CameraPosition: [-64, 0, -45]},
+    {name: "Earth", place: "Skills", texture: "/Earth.jpg", size: 2.1, position: [-30, 0, -60], CameraPosition: [-32, 0, -55]},
     {name: "Mars", place: "Skills", texture: "/Mars.jpg", size: 2, position: [-80, 0, -70], CameraPosition: [-82, 0, -65]},
-    {name: "Jupiter", place: "Experience", texture: "/Jupiter.jpg", size: 2.5, position: [-50, 0, -80], CameraPosition: [-52, 0, -75]}
 ]
 
 let Sun = Planets[0]
@@ -19,7 +18,6 @@ let Mercury = Planets[1]
 let Venus = Planets[2]
 let Earth = Planets[3]
 let Mars = Planets[4]
-let Jupiter = Planets[5]
 
 function CameraController({ Place }) {
     /* Pull the camera from useThree which returns an object that has information of the current environment  */
@@ -35,15 +33,15 @@ function CameraController({ Place }) {
         target = Mercury.CameraPosition
     }
 
-    if (Place === "Experience") {
+    if (Place === "Projects") {
         target = Venus.CameraPosition
     }
 
-    if (Place === "Projects") {
+    if (Place === "Skills") {
         target = Earth.CameraPosition
     }
 
-    if (Place === "Skills") {
+    if (Place === "Education") {
         target = Mars.CameraPosition
     }
 
@@ -64,7 +62,7 @@ function CameraController({ Place }) {
 export default function SpaceScene({Place}) {
     //This prop imports the planets and places them on a canvas with lighting 
     return (
-        <Canvas>
+        <Canvas >
             {/* Color and lighting */}
             <ambientLight intensity={0.01} />
 
@@ -84,7 +82,6 @@ export default function SpaceScene({Place}) {
 
             {/* All of the planets */}
             
-
             <SunObject
             size={Sun.size}
             position={Sun.position}
@@ -128,12 +125,7 @@ export default function SpaceScene({Place}) {
             speed={0.004}
             />
 
-            <Planet
-            size={Jupiter.size}
-            position={Jupiter.position}
-            textureurl={Jupiter.texture}
-            speed={0.004}
-            />
+           
         </Canvas>
   );
 }   

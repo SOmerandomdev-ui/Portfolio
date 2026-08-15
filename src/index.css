@@ -15,4 +15,18 @@
   background: #070B14
 }
 
+section {
+  animation: fadein 2s ease-out forwards;
+}
+
+@keyframes fadein {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
 
