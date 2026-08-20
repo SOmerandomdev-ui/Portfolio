@@ -10,7 +10,7 @@ const Planets = [
     {name: "Mercury", place: "About", texture: "/Mercury.jpg", size: 1.9, position: [-10, 0, -16], CameraPosition: [-6.5, 0, -11]},
     {name: "Venus", place: "Projects", texture: "/Venus.jpg", size: 1.7, position: [-60, 0, -50], CameraPosition: [-64, 0, -45]},
     {name: "Earth", place: "Skills", texture: "/Earth.jpg", size: 2.1, position: [-30, 0, -60], CameraPosition: [-32, 0, -55]},
-    {name: "Mars", place: "Skills", texture: "/Mars.jpg", size: 2, position: [-80, 0, -70], CameraPosition: [-82, 0, -65]},
+    {name: "Mars", place: "Skills", texture: "/Mars.jpg", size: 2, position: [-80, 0, -70], CameraPosition: [-83.5, 0, -65]},
 ]
 
 let Sun = Planets[0]

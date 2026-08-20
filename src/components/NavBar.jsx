@@ -35,10 +35,10 @@ export default function NavBar({State}) {
                     Skills
                 </Link>
 
-                <a className="text-sm text-gray-300 transition duration-300 hover:text-cyan-400 cursor-pointer"
+                <Link to="Education" className="text-sm text-gray-300 transition duration-300 hover:text-cyan-400 cursor-pointer"
                 onClick={()=> State("Education")}>
                     Education
-                </a>
+                </Link>
 
                 <a className="rounded-full border border-cyan-400/50 px-5 py-2 text-sm text-cyan-400 transition duration-300 hover:bg-cyan-400 hover:text-[#070B14] cursor-pointer">
                     Contact
