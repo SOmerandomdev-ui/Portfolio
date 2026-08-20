@@ -45,10 +45,6 @@ function CameraController({ Place }) {
         target = Mars.CameraPosition
     }
 
-    if (Place === "Education") {
-        target = Jupiter.CameraPosition
-    }
-
     useFrame(() => {
         camera.position.lerp(
             new THREE.Vector3(...target),

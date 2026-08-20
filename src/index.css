@@ -12,21 +12,53 @@
 #root {
   height: 100vh;
   width: 100vw;
-  background: #070B14
+  background: #070B14;
+  overflow-y: hidden
 }
 
-section {
+.animate-fadein {
   animation: fadein 2s ease-out forwards;
 }
 
 @keyframes fadein {
-  from {
-    opacity: 0;
-  }
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
 
-  to {
+@media (prefers-reduced-motion: reduce) {
+  .animate-fadein {
+    animation: none;
     opacity: 1;
   }
 }
 
+.Github {
+  filter: invert(1) brightness(1);
+  height: 30px;
+  width: 30px;
+}
 
+.skills-x-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(34, 211, 238, 0.35) transparent;
+  -webkit-overflow-scrolling: touch;
+}
+
+.skills-x-scroll::-webkit-scrollbar {
+  height: 6px;
+}
+
+.skills-x-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.skills-x-scroll::-webkit-scrollbar-thumb {
+  background: rgba(34, 211, 238, 0.35);
+  border-radius: 999px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skills-x-scroll {
+    scroll-behavior: auto;
+  }
+}

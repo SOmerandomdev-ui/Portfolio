@@ -30,10 +30,10 @@ export default function NavBar({State}) {
                     Projects
                 </Link>
 
-                <a className="text-sm text-gray-300 transition duration-300 hover:text-cyan-400 cursor-pointer"
+                <Link to="Skills" className="text-sm text-gray-300 transition duration-300 hover:text-cyan-400 cursor-pointer"
                 onClick={()=> State("Skills")}>
                     Skills
-                </a>
+                </Link>
 
                 <a className="text-sm text-gray-300 transition duration-300 hover:text-cyan-400 cursor-pointer"
                 onClick={()=> State("Education")}>

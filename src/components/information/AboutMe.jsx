@@ -5,9 +5,9 @@ export default function About() {
             className="relative z-20 flex mr-12 justify-end min-h-screen items-center"
         >
             {/* Glass background */}
-            <div className="absolute h-[600px] w-[1000px] rounded-2xl bg-black/10 backdrop-blur-md" />
+            <div className="absolute h-[600px] w-[1000px] rounded-2xl bg-black/10 backdrop-blur-md animate-fadein" />
 
-            <div className="relative max-w-4xl text-white">
+            <div className="relative max-w-4xl text-white animate-fadein">
 
                 <p className="mb-4 text-sm font-medium uppercase tracking-[0.3em] text-cyan-400">
                     About Me
