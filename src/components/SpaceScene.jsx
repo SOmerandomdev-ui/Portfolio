@@ -5,13 +5,14 @@ import { Stars, OrbitControls } from "@react-three/drei";
 import { EffectComposer, Bloom } from "@react-three/postprocessing";
 import { Planet, SunObject } from "./Planets/Earth.jsx"
 
+//[-10, 2, -4]
 const Planets = [
-    {name: "Sun", place: "Home", texture: "/Sun.jpg", size: 2.7, position: [2, 0, 0], CameraPosition: [0, 0, 5]},
-    {name: "Mercury", place: "About", texture: "/Mercury.jpg", size: 1.9, position: [-10, 0, -16], CameraPosition: [-6.5, 0, -11]},
-    {name: "Venus", place: "Projects", texture: "/Venus.jpg", size: 1.7, position: [-60, 0, -50], CameraPosition: [-64, 0, -45]},
-    {name: "Earth", place: "Education", texture: "/Earth.jpg", size: 2.1, position: [-30, 0, -60], CameraPosition: [-32, 0, -55]},
-    {name: "Mars", place: "Skills", texture: "/Mars.jpg", size: 2, position: [-80, 0, -70], CameraPosition: [-83.5, 0, -65]},
-    {name: "Jupiter", place: "Contact", texture: "/Jupiter.jpg", size: 2, position: [-110, 0, -105], CameraPosition: [-106.5, 0, -100]},
+    {name: "Sun", place: "Home", texture: "/Sun.jpg", size: 5, position: [0, 0, 0], CameraPosition: [0, 100, 0]},
+    {name: "Mercury", place: "About", texture: "/Mercury.jpg", size: 1.9, position: [30, 0, 0], CameraPosition: [20, 0, 8.5]},
+    {name: "Venus", place: "Projects", texture: "/Venus.jpg", size: 1.7, position: [55.4, 0, 0], CameraPosition: [44.4, 0, 0]},
+    {name: "Earth", place: "Education", texture: "/Earth.jpg", size: 2.1, position: [76.9, 0, 0], CameraPosition: [66.9, 0, 0]},
+    {name: "Mars", place: "Skills", texture: "/Mars.jpg", size: 2, position: [116.9, 0, 0], CameraPosition: [106.9, 0, -7]},
+    {name: "Jupiter", place: "Contact", texture: "/Jupiter.jpg", size: 4, position: [200, 0, 0], CameraPosition: [190, 0, 7]},
 ]
 
 let Sun = Planets[0]
@@ -56,8 +57,11 @@ function CameraController({ Place }) {
             new THREE.Vector3(...target),
             0.05
         );
+        //camera.lookAt(10000, 0, 0);
+        camera.lookAt(0, 0, 0);
     });
 
+    
     return null;
 }
 
@@ -66,16 +70,16 @@ export default function SpaceScene({Place}) {
     return (
         <Canvas >
             {/* Color and lighting */}
-            <ambientLight intensity={0.01} />
+            <ambientLight intensity={2} />
 
             <Stars
-                radius={140}
-                depth={50}
+                radius={250}
+                depth={80}
                 count={6000}
                 factor={4}
                 saturation={0}
                 fade
-                speed={1}
+                speed={2}
             />
             
             <color attach="background" args={["#000107"]} />
@@ -103,37 +107,38 @@ export default function SpaceScene({Place}) {
             size={Mercury.size}
             position={Mercury.position}
             textureurl={Mercury.texture}
-            speed={0.004}
+            speedx={0.004}
             />
 
             <Planet
             size={Venus.size}
             position={Venus.position}
             textureurl={Venus.texture}
-            speed={0.004}
+            speedx={0.004}
             />
 
             <Planet
             size={Earth.size}
             position={Earth.position}
             textureurl={Earth.texture}
-            speed={0.004}
+            speedx={0.004}
+            speedy={0.005}
             />
 
             <Planet
             size={Mars.size}
             position={Mars.position}
             textureurl={Mars.texture}
-            speed={0.004}
+            speedx={0.004}
             />
 
             <Planet
             size={Jupiter.size}
             position={Jupiter.position}
             textureurl={Jupiter.texture}
-            speed={0.004}
+            speedx={0.004}
             />
-            
+
         </Canvas>
   );
 }   
