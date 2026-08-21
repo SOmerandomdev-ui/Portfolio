@@ -6,6 +6,7 @@ import About from "./components/information/AboutMe.jsx"
 import Projects from "./components/information/Projects.jsx"
 import Skills from "./components/information/Skills.jsx"
 import Education from "./components/information/Education.jsx"
+import Contact from "./components/information/Contact.jsx"
 import './index.css'
 import App from './App.jsx'
 
@@ -37,6 +38,11 @@ const router = createBrowserRouter([
       {
         path: "/Education",
         element: <Education/>
+      },
+
+      {
+        path: "/Contact",
+        element: <Contact/>
       }
     ]
   },

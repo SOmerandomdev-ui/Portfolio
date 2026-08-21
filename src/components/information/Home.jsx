@@ -5,7 +5,7 @@ export default function Welcome() {
             className="relative z-20 ml-12 flex min-h-screen items-center px-12"
         >
             {/* Glass background */}
-            <div className="absolute left-0 z-[-1] h-[500px] w-[700px] rounded-2xl  bg-black/20 backdrop-blur-md animate-fadein" />
+            <div className="absolute left-0 z-[-1] h-[500px] w-[700px] rounded-2xl bg-black/20 backdrop-blur-md animate-fadein" />
 
             <div className="max-w-2xl text-white animate-fadein">
 

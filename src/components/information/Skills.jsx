@@ -106,7 +106,8 @@ export default function Skills() {
                         <hr className="border-0 bg-gradient-to-r from-transparent via-white/70 to-transparent w-1/2 h-[2px] self-center mt-2 mb-4" />
 
                         {skills.Skills.map((skill) => (
-                            <div className="flex min-h-11 items-center gap-3 rounded-xl border border-white/10 bg-black/20 px-3 py-2.5 mt-2 transition duration-200 hover:border-cyan-400/35 hover:bg-cyan-400/10">
+                            <div key={skill.name} 
+                            className="flex min-h-11 items-center gap-3 rounded-xl border border-white/10 bg-black/20 px-3 py-2.5 mt-2 transition duration-200 hover:border-cyan-400/35 hover:bg-cyan-400/10">
                                 <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-cyan-400/20 bg-cyan-400/5 text-cyan-300">
                                     {skill.Icon && <skill.Icon/> }
                                 </span>
