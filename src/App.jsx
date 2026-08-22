@@ -8,12 +8,13 @@ import './App.css'
 
 function App() {
   const [Lookat, setLookat] = useState("Home")
+  const [Jump, setJump] = useState(false)
   
   return <>
-    <NavBar State={setLookat}/>
+    <NavBar State={setLookat} ChangeJump={setJump}/>
     <Outlet />
     <div className="fixed inset-0 z-[1]">
-      <SpaceScene Place={Lookat}/>
+      <SpaceScene Place={Lookat} Jump={Jump} ChangeJump={setJump}/>
     </div>
   </>
 

@@ -5,15 +5,20 @@ import * as THREE from "three";
 import { useFrame } from "@react-three/fiber";
 
 
-export function Planet({position, textureurl, speedx, speedy = 0, size, ring}) {
+export function Planet({position, textureurl, speedx, speedy = 0, size, anglechange = 0.05, otherref}) {
     //load textures from three.js 
     const texture = useTexture(textureurl);
-    const PlanetRef = useRef(null)
+    const PlanetRef = otherref ?? useRef(null)
+    let angle1 = useRef(0);
+    let angle2 = useRef(0.3)
 
     //Makes the planet spin 
     useFrame((state, delta) => {
         PlanetRef.current.rotation.y += speedx;
         PlanetRef.current.rotation.z += speedy;
+        angle1.current += 0.5 * anglechange
+        PlanetRef.current.position.x = Math.cos(angle1.current) * Math.sqrt(position[0] ** 2 + position[2] ** 2);
+        PlanetRef.current.position.z = Math.sin(angle1.current) * Math.sqrt(position[0] ** 2 + position[2] ** 2);
     });
 
     return (
@@ -32,7 +37,7 @@ export function Planet({position, textureurl, speedx, speedy = 0, size, ring}) {
 
             <mesh 
             position = {[0, 0, 0]}
-            rotation = {[Math.PI / 2  - 0.3 , 0, 0]}>
+            rotation = {[Math.PI / 2, 0, 0]}>
                 <ringGeometry args={[position[0] - 0.1, position[0] + 0.1, 64]} />
                  <meshBasicMaterial
                     color="white"

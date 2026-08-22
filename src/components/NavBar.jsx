@@ -5,7 +5,7 @@ import { Stars, OrbitControls } from "@react-three/drei";
 import { motion, AnimatePresence } from "framer-motion";
 
 
-export default function NavBar({State}) {
+export default function NavBar({State, ChangeJump}) {
     return (
         <nav className="absolute  z-50 top-0 left-0 flex h-[10vh] w-full items-center justify-between px-12  text-white ">
             
@@ -16,32 +16,44 @@ export default function NavBar({State}) {
             <div className="flex items-center gap-8">
                 <Link to="/"
                 className="text-sm text-gray-300 transition duration-300 hover:text-cyan-400 cursor-pointer"
-                onClick={()=> State("Home")}>
+                onClick={()=> {State("Home")
+                    ChangeJump(true)}
+                }>
                     Home
                 </Link>
 
                 <Link to="/About" className="text-sm text-gray-300 transition duration-300 hover:text-cyan-400 cursor-pointer"
-                onClick={()=> State("About")}>
+                onClick={()=> {State("About")
+                    ChangeJump(true)}
+                }>
                     About Me
                 </Link>
 
                 <Link to="Projects" className="text-sm text-gray-300 transition duration-300 hover:text-cyan-400 cursor-pointer"
-                onClick={()=> State("Projects")}>
+                onClick={()=> {State("Projects")
+                    ChangeJump(true)}
+                }>
                     Projects
                 </Link>
 
                 <Link to="Skills" className="text-sm text-gray-300 transition duration-300 hover:text-cyan-400 cursor-pointer"
-                onClick={()=> State("Skills")}>
+                onClick={()=> {State("Skills")
+                    ChangeJump(true)}
+                }>
                     Skills
                 </Link>
 
                 <Link to="Education" className="text-sm text-gray-300 transition duration-300 hover:text-cyan-400 cursor-pointer"
-                onClick={()=> State("Education")}>
+                onClick={()=> {State("Education")
+                    ChangeJump(true)}
+                }>
                     Education
                 </Link>
 
                 <Link to="Contact" className="rounded-full border border-cyan-400/50 px-5 py-2 text-sm text-cyan-400 transition duration-300 hover:bg-cyan-400 hover:text-[#070B14] cursor-pointer"
-                onClick={()=> State("Contact")}>
+                onClick={()=> {State("Contact")
+                    ChangeJump(true)}
+                }>
                     Contact
                 </Link>
             </div>
