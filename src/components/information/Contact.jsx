@@ -53,10 +53,10 @@ export default function Contact() {
   return (
     <section
       id="contact"
-      className="relative mr-30 z-20 flex min-h-screen items-center justify-end px-12"
+      className="relative mr-30 z-20 flex min-h-screen items-center justify-center px-12"
     >
       {/* Glass background — same as Home, pinned right */}
-      <div className="absolute right-0 z-[-1] h-[500px] w-[700px] rounded-2xl bg-black/20 backdrop-blur-md animate-fadein" />
+      <div className="absolute  z-[-1] h-[500px] w-[700px] rounded-2xl bg-black/20 backdrop-blur-md animate-fadein" />
 
       <div className="relative max-w-2xl text-left text-white animate-fadein">
         <p className="mb-4 text-sm font-medium uppercase tracking-[0.3em] text-cyan-400">

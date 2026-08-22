@@ -7,12 +7,12 @@ import { Planet, SunObject } from "./Planets/Earth.jsx"
 
 //[-10, 0, -4]
 const Planets = [
-    {name: "Sun", place: "Home", texture: "/Sun.jpg", size: 5, position: [0, 0, 0], CameraPosition: [0, 180, 0]},
-    {name: "Mercury", place: "About", texture: "/Mercury.jpg", size: 1.9, position: [30, 0, 0], CameraPosition: [20, 0, 8.5]},
-    {name: "Venus", place: "Projects", texture: "/Venus.jpg", size: 1.7, position: [55.4, 0, 0], CameraPosition: [44.4, 0, 0]},
-    {name: "Earth", place: "Education", texture: "/Earth.jpg", size: 2.1, position: [76.9, 0, 0], CameraPosition: [66.9, 0, 0]},
-    {name: "Mars", place: "Skills", texture: "/Mars.jpg", size: 2, position: [116.9, 0, 0], CameraPosition: [106.9, 0, -7]},
-    {name: "Jupiter", place: "Contact", texture: "/Jupiter.jpg", size: 4, position: [200, 0, 0], CameraPosition: [190, 0, 7]},
+    {name: "Sun", place: "Home", texture: "/Sun.jpg", size: 5, position: [0, 0, 0], CameraPosition: [-10, 0, -5]},
+    {name: "Mercury", place: "About", texture: "/Mercury.jpg", size: 1.9, position: [30, 0, 0]},
+    {name: "Venus", place: "Projects", texture: "/Venus.jpg", size: 1.7, position: [55.4, 0, 0]},
+    {name: "Earth", place: "Skills", texture: "/Earth.jpg", size: 2.1, position: [76.9, 0, 0]},
+    {name: "Mars", place: "Education", texture: "/Mars.jpg", size: 2, position: [116.9, 0, 0]},
+    {name: "Jupiter", place: "Contact", texture: "/Jupiter.jpg", size: 4, position: [0, 2000, 0]},
 ]
 
 let Sun = Planets[0]
@@ -23,12 +23,11 @@ let Mars = Planets[4]
 let Jupiter = Planets[5]
 
 function CameraController({ Place, Refs, Jump, ChangeJump}) {
-    /* Pull the camera from useThree which returns an object that has information of the current environment  */
     const { camera } = useThree();
+    let CameraView = new THREE.Vector3(0,0,0)
     let target;
 
-    {/* Camera change conditions */}
-    useFrame(() => {
+    useFrame((state, delta) => {
        if (Place === "Home") {
         target = new THREE.Vector3(...Sun.CameraPosition);
         }
@@ -36,50 +35,59 @@ function CameraController({ Place, Refs, Jump, ChangeJump}) {
         else if (Place === "About" && Refs.MercuryRef.current) {
             const position = Refs.MercuryRef.current.position;
             target = new THREE.Vector3(position.x - 10, 0, position.z + 8.5)
+            CameraView = target
+             camera.lookAt(10000, 0, 0);
         }
 
         if (Place === "Projects") {
             const position = Refs.VenusRef.current.position;
-            target = new THREE.Vector3(position.x - 10, 0, position.z + 10)
+            target = new THREE.Vector3(position.x - 15, 0, position.z + 5)
+            
+             camera.lookAt(10000, 0, 0);
         }
 
         if (Place === "Skills") {
             const position = Refs.EarthRef.current.position;
-            target = new THREE.Vector3(position.x - 10, 0, position.z - 10)
+            target = new THREE.Vector3(position.x - 15, 0, position.z - 10)
+            CameraView = target
+            camera.lookAt(10000, 0, 0);
         }
 
         if (Place === "Education") {
             const position = Refs.MarsRef.current.position;
-            target = new THREE.Vector3(position.x - 10, 0, position.z - 10)
+            target = new THREE.Vector3(position.x - 10, 0, position.z - 7)
+            CameraView = target
+             camera.lookAt(10000, 0, 0);
         }
 
         if (Place === "Contact") {
             const position = Refs.JupiterRef.current.position;
-            target = new THREE.Vector3(position.x - 10, 0, position.z + 5.5)
+            target = new THREE.Vector3(0, 120, 0)
         }
         const distance = camera.position.distanceTo(target);
-        if (distance > 20) {
-            camera.position.lerp(target, 0.05);
+        
+        if (Place === "Contact") {
+            const posAlpha = 1 - Math.exp(-1.2 * delta);
+            if (distance > 0.05) {
+                camera.position.lerp(target, posAlpha);
+            } else {
+                camera.position.copy(target);
+            }
+
+            const dummy = camera.clone();
+            dummy.position.copy(camera.position);
+            dummy.lookAt(0, 0, 0);
+            const rotAlpha = 1 - Math.exp(-3 * delta);
+
+            camera.quaternion.slerp(dummy.quaternion, rotAlpha);
+        } else if (distance > 5) {
+            camera.position.lerp(target, 0.12);
         } else {
             camera.position.copy(target);
-}
-
-        camera.lookAt(10000, 0, 0);
-        //camera.lookAt(0, 0, 0);
+        }   
             
     });
 
-    useEffect(() => {
-        if (Jump) {
-            const timer = setTimeout(() => {
-                ChangeJump(false);
-            }, 3000); 
-
-            return () => clearTimeout(timer); 
-        }
-    }, [Jump]);
-
-    
     return null;
 }
 
@@ -94,7 +102,11 @@ export default function SpaceScene({Place, Jump, ChangeJump}) {
     return (
         <Canvas >
             {/* Color and lighting */}
-            <ambientLight intensity={0.2} />
+            <ambientLight intensity={0.1} />
+            <directionalLight 
+            position={[5, 20, 30]}   
+            intensity={1.5}
+         />
 
             <Stars
                 radius={250}
