@@ -1,11 +1,37 @@
 import { Canvas, useThree, useFrame } from "@react-three/fiber";
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import * as THREE from "three";
-import { Stars, OrbitControls } from "@react-three/drei";
+import { Stars } from "@react-three/drei";
 import { EffectComposer, Bloom } from "@react-three/postprocessing";
 import { Planet, SunObject } from "./Planets/Earth.jsx"
 
-//[-10, 0, -4]
+function VisibilityController() {
+    const { invalidate, clock } = useThree();
+    const [visible, setVisible] = useState(!document.hidden);
+
+    useEffect(() => {
+        const onChange = () => {
+            const isVisible = !document.hidden;
+            setVisible(isVisible);
+            if (isVisible) {
+                invalidate();
+            }
+        };
+        document.addEventListener("visibilitychange", onChange);
+        return () => document.removeEventListener("visibilitychange", onChange);
+    }, [invalidate]);
+
+    useFrame(() => {
+        if (!visible) {
+            clock.stop();
+        } else if (!clock.running) {
+            clock.start();
+        }
+    });
+
+    return null;
+}
+
 const Planets = [
     {name: "Sun", place: "Home", texture: "/Sun.jpg", size: 5, position: [0, 0, 0], CameraPosition: [-10, 0, -5]},
     {name: "Mercury", place: "About", texture: "/Mercury.jpg", size: 1.9, position: [30, 0, 0]},
@@ -15,55 +41,58 @@ const Planets = [
     {name: "Jupiter", place: "Contact", texture: "/Jupiter.jpg", size: 4, position: [0, 2000, 0]},
 ]
 
-let Sun = Planets[0]
-let Mercury = Planets[1]
-let Venus = Planets[2]
-let Earth = Planets[3]
-let Mars = Planets[4]
-let Jupiter = Planets[5]
+const Sun = Planets[0];
+const Mercury = Planets[1];
+const Venus = Planets[2];
+const Earth = Planets[3];
+const Mars = Planets[4];
+const Jupiter = Planets[5];
 
-function CameraController({ Place, Refs, Jump, ChangeJump}) {
+function CameraController({ Place, Refs }) {
     const { camera } = useThree();
-    let CameraView = new THREE.Vector3(0,0,0)
     let target;
-
+    
     useFrame((state, delta) => {
-       if (Place === "Home") {
-        target = new THREE.Vector3(...Sun.CameraPosition);
+        if (Place === "Home") {
+            target = new THREE.Vector3(...Sun.CameraPosition);
+
+            const dummy = camera.clone();
+            dummy.position.copy(camera.position);
+            dummy.lookAt(10000, 0, 0);
+            const rotAlpha = 1 - Math.exp(-3 * delta);
+            camera.quaternion.slerp(dummy.quaternion, rotAlpha);
         }
 
         else if (Place === "About" && Refs.MercuryRef.current) {
             const position = Refs.MercuryRef.current.position;
             target = new THREE.Vector3(position.x - 10, 0, position.z + 8.5)
-            CameraView = target
              camera.lookAt(10000, 0, 0);
         }
 
-        if (Place === "Projects") {
+        else if (Place === "Projects" && Refs.VenusRef.current) {
             const position = Refs.VenusRef.current.position;
             target = new THREE.Vector3(position.x - 15, 0, position.z + 5)
-            
              camera.lookAt(10000, 0, 0);
         }
 
-        if (Place === "Skills") {
+        else if (Place === "Skills" && Refs.EarthRef.current) {
             const position = Refs.EarthRef.current.position;
             target = new THREE.Vector3(position.x - 15, 0, position.z - 10)
-            CameraView = target
             camera.lookAt(10000, 0, 0);
         }
 
-        if (Place === "Education") {
+        else if (Place === "Education" && Refs.MarsRef.current) {
             const position = Refs.MarsRef.current.position;
             target = new THREE.Vector3(position.x - 10, 0, position.z - 7)
-            CameraView = target
              camera.lookAt(10000, 0, 0);
         }
 
-        if (Place === "Contact") {
-            const position = Refs.JupiterRef.current.position;
+        else if (Place === "Contact") {
             target = new THREE.Vector3(0, 120, 0)
         }
+
+        if (!target) return;
+
         const distance = camera.position.distanceTo(target);
         
         if (Place === "Contact") {
@@ -85,23 +114,21 @@ function CameraController({ Place, Refs, Jump, ChangeJump}) {
         } else {
             camera.position.copy(target);
         }   
-            
     });
 
     return null;
 }
 
-export default function SpaceScene({Place, Jump, ChangeJump}) {
-    //This prop imports the planets and places them on a canvas with lighting 
-    const MercuryRef = useRef(null)
-    const VenusRef = useRef(null)
-    const EarthRef = useRef(null)
-    const MarsRef = useRef(null)
-    const JupiterRef = useRef(null)
-    
+export default function SpaceScene({ Place }) {
+    const MercuryRef = useRef(null);
+    const VenusRef = useRef(null);
+    const EarthRef = useRef(null);
+    const MarsRef = useRef(null);
+    const JupiterRef = useRef(null);
+
     return (
-        <Canvas >
-            {/* Color and lighting */}
+        <Canvas className="h-full w-full">
+            <VisibilityController />
             <ambientLight intensity={0.1} />
             <directionalLight 
             position={[5, 20, 30]}   
@@ -122,8 +149,7 @@ export default function SpaceScene({Place, Jump, ChangeJump}) {
 
             <CameraController Place={Place}
             Refs={{MercuryRef, VenusRef, EarthRef, MarsRef, JupiterRef}}
-            Jump={Jump}
-            ChangeJump={ChangeJump}/>
+            />
 
             {/* All of the planets */}
             

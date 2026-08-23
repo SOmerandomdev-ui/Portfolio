@@ -15,7 +15,7 @@
     "@react-three/postprocessing": "^3.0.5",
     "@tailwindcss/vite": "^4.3.3",
     "flowbite-react": "^0.12.17",
-    "framer-motion": "^13.1.0",
+    "framer-motion": "^13.1.1",
     "lucide-react": "^1.32.0",
     "postprocessing": "^6.39.4",
     "react": "^19.2.8",

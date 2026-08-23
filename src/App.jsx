@@ -1,24 +1,48 @@
-import { useState } from 'react'
-import { Outlet } from "react-router";
+import { Suspense } from "react";
+import { Outlet, useLocation } from "react-router";
 import SpaceScene from "./components/SpaceScene";
-import { Planet } from "./components/Planets/Earth.jsx"
-import NavBar from "./components/NavBar.jsx"
-import './App.css'
+import NavBar from "./components/NavBar.jsx";
 
+const PLACE_BY_PATH = {
+  "/": "Home",
+  "/About": "About",
+  "/Projects": "Projects",
+  "/Skills": "Skills",
+  "/Education": "Education",
+  "/Contact": "Contact",
+};
 
 function App() {
-  const [Lookat, setLookat] = useState("Home")
-  const [Jump, setJump] = useState(false)
-  
-  return <>
-    <NavBar State={setLookat} ChangeJump={setJump}/>
-    <Outlet />
-    <div className="fixed inset-0 z-[1]">
-      <SpaceScene Place={Lookat} Jump={Jump} ChangeJump={setJump}/>
-    </div>
-  </>
+  const { pathname } = useLocation();
+  const place = PLACE_BY_PATH[pathname] ?? "Home";
 
-  
+  return (
+    <>
+      <a href="#main" className="skip-link">
+        Skip to content
+      </a>
+      <NavBar />
+      <main
+        id="main"
+        className="relative z-20 h-dvh overflow-x-hidden overflow-y-auto"
+      >
+        <Suspense
+          fallback={
+            <div className="flex min-h-dvh items-center px-12">
+              <p className="text-sm uppercase tracking-[0.3em] text-cyan-400">
+                Loading
+              </p>
+            </div>
+          }
+        >
+          <Outlet />
+        </Suspense>
+      </main>
+      <div className="pointer-events-none fixed inset-0 z-[1]" aria-hidden>
+        <SpaceScene Place={place} />
+      </div>
+    </>
+  );
 }
 
-export default App
+export default App;

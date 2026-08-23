@@ -1,62 +1,106 @@
-import { Suspense, useState, useEffect } from "react";
-import { Link } from "react-router"
-import { Canvas } from "@react-three/fiber";
-import { Stars, OrbitControls } from "@react-three/drei";
-import { motion, AnimatePresence } from "framer-motion";
+import { useEffect, useState } from "react";
+import { NavLink } from "react-router";
+import { Menu, X } from "lucide-react";
 
+const LINKS = [
+  { to: "/", label: "Home" },
+  { to: "/About", label: "About Me" },
+  { to: "/Projects", label: "Projects" },
+  { to: "/Skills", label: "Skills" },
+  { to: "/Education", label: "Education" },
+];
 
-export default function NavBar({State, ChangeJump}) {
-    return (
-        <nav className="absolute  z-50 top-0 left-0 flex h-[10vh] w-full items-center justify-between px-12  text-white ">
-            
-            <a className="text-xl font-semibold tracking-wide transition duration-300 hover:text-cyan-400 cursor-pointer opacity-150">
-                Dion Machado
-            </a>
+function linkClass(isActive) {
+  return `inline-flex min-h-11 items-center text-sm transition duration-200 hover:text-cyan-400 ${
+    isActive ? "text-cyan-400" : "text-gray-300"
+  }`;
+}
 
-            <div className="flex items-center gap-8">
-                <Link to="/"
-                className="text-sm text-gray-300 transition duration-300 hover:text-cyan-400 cursor-pointer"
-                onClick={()=> {State("Home")
-                    ChangeJump(true)}
-                }>
-                    Home
-                </Link>
+export default function NavBar() {
+  const [open, setOpen] = useState(false);
 
-                <Link to="/About" className="text-sm text-gray-300 transition duration-300 hover:text-cyan-400 cursor-pointer"
-                onClick={()=> {State("About")
-                    ChangeJump(true)}
-                }>
-                    About Me
-                </Link>
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e) => {
+      if (e.key === "Escape") setOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open]);
 
-                <Link to="Projects" className="text-sm text-gray-300 transition duration-300 hover:text-cyan-400 cursor-pointer"
-                onClick={()=> {State("Projects")
-                    ChangeJump(true)}
-                }>
-                    Projects
-                </Link>
+  const close = () => setOpen(false);
 
-                <Link to="Skills" className="text-sm text-gray-300 transition duration-300 hover:text-cyan-400 cursor-pointer"
-                onClick={()=> {State("Skills")
-                    ChangeJump(true)}
-                }>
-                    Skills
-                </Link>
+  return (
+    <header className="absolute inset-x-0 top-0 z-50">
+      <nav
+        aria-label="Primary"
+        className="flex h-16 w-full items-center justify-between px-5 text-white md:h-[10vh] md:px-12"
+      >
+        <NavLink
+          to="/"
+          className="text-xl font-semibold tracking-wide transition duration-200 hover:text-cyan-400"
+        >
+          Dion Machado
+        </NavLink>
 
-                <Link to="Education" className="text-sm text-gray-300 transition duration-300 hover:text-cyan-400 cursor-pointer"
-                onClick={()=> {State("Education")
-                    ChangeJump(true)}
-                }>
-                    Education
-                </Link>
+        <div className="hidden items-center gap-8 lg:flex">
+          {LINKS.map((link) => (
+            <NavLink
+              key={link.to}
+              to={link.to}
+              end={link.to === "/"}
+              className={({ isActive }) => linkClass(isActive)}
+            >
+              {link.label}
+            </NavLink>
+          ))}
+          <NavLink
+            to="/Contact"
+            className="inline-flex min-h-11 items-center rounded-full border border-cyan-400/50 px-5 py-2 text-sm text-cyan-400 transition duration-200 hover:bg-cyan-400 hover:text-[#070B14]"
+          >
+            Contact
+          </NavLink>
+        </div>
 
-                <Link to="Contact" className="rounded-full border border-cyan-400/50 px-5 py-2 text-sm text-cyan-400 transition duration-300 hover:bg-cyan-400 hover:text-[#070B14] cursor-pointer"
-                onClick={()=> {State("Contact")
-                    ChangeJump(true)}
-                }>
-                    Contact
-                </Link>
-            </div>
-        </nav>
-    );
+        <button
+          type="button"
+          className="inline-flex h-11 w-11 cursor-pointer items-center justify-center rounded-full border border-white/15 text-white lg:hidden"
+          aria-expanded={open}
+          aria-controls="mobile-nav"
+          aria-label={open ? "Close menu" : "Open menu"}
+          onClick={() => setOpen((v) => !v)}
+        >
+          {open ? <X size={20} aria-hidden /> : <Menu size={20} aria-hidden />}
+        </button>
+      </nav>
+
+      {open ? (
+        <div
+          id="mobile-nav"
+          className="glass mx-4 rounded-2xl px-4 py-3 lg:hidden"
+        >
+          <div className="flex flex-col gap-1">
+            {LINKS.map((link) => (
+              <NavLink
+                key={link.to}
+                to={link.to}
+                end={link.to === "/"}
+                className={({ isActive }) => `${linkClass(isActive)} px-2`}
+                onClick={close}
+              >
+                {link.label}
+              </NavLink>
+            ))}
+            <NavLink
+              to="/Contact"
+              onClick={close}
+              className="mt-2 inline-flex min-h-11 items-center justify-center rounded-full border border-cyan-400/50 px-5 py-2 text-sm text-cyan-400 transition duration-200 hover:bg-cyan-400 hover:text-[#070B14]"
+            >
+              Contact
+            </NavLink>
+          </div>
+        </div>
+      ) : null}
+    </header>
+  );
 }

@@ -1,33 +1,67 @@
-@import url('https://googleapis.com');
 @import "tailwindcss";
 @source "../.flowbite-react/class-list.json";
 @import "flowbite-react/plugin/tailwindcss";
-@import "tailwindcss";
 
 * {
   box-sizing: border-box;
- 
+}
+
+html {
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.6;
+  background: #070b14;
+  color: #fff;
 }
 
 #root {
-  height: 100vh;
+  height: 100dvh;
   width: 100vw;
-  background: #070B14;
-  overflow-y: hidden
+  background: #070b14;
+  overflow: hidden;
+}
+
+:focus-visible {
+  outline: 2px solid #22d3ee;
+  outline-offset: 3px;
+}
+
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -4rem;
+  z-index: 100;
+  padding: 0.75rem 1.25rem;
+  border-radius: 9999px;
+  background: #070b14;
+  color: #22d3ee;
+  border: 1px solid rgb(34 211 238 / 0.4);
+  font-size: 0.875rem;
+}
+
+.skip-link:focus {
+  top: 1rem;
+}
+
+.glass {
+  background: rgb(0 0 0 / 0.22);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgb(255 255 255 / 0.08);
 }
 
 .animate-fadein {
-  animation: fadein 2s ease-out forwards;
+  animation: fadein 300ms ease-out forwards;
 }
 
 @keyframes fadein {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .animate-fadein {
-    animation: none;
+  from {
+    opacity: 0;
+  }
+  to {
     opacity: 1;
   }
 }
@@ -38,26 +72,57 @@
   width: 30px;
 }
 
-.skills-x-scroll {
+/* Spacey scrollbars — cyan thumb on void track */
+* {
   scrollbar-width: thin;
-  scrollbar-color: rgba(34, 211, 238, 0.35) transparent;
-  -webkit-overflow-scrolling: touch;
+  scrollbar-color: rgb(34 211 238 / 0.45) rgb(7 11 20 / 0.6);
 }
 
-.skills-x-scroll::-webkit-scrollbar {
-  height: 6px;
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
 }
 
-.skills-x-scroll::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.skills-x-scroll::-webkit-scrollbar-thumb {
-  background: rgba(34, 211, 238, 0.35);
+*::-webkit-scrollbar-track {
+  background: rgb(7 11 20 / 0.85);
   border-radius: 999px;
 }
 
+*::-webkit-scrollbar-thumb {
+  background: linear-gradient(
+    180deg,
+    rgb(34 211 238 / 0.55),
+    rgb(34 211 238 / 0.25)
+  );
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(
+    180deg,
+    rgb(34 211 238 / 0.85),
+    rgb(34 211 238 / 0.45)
+  );
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+*::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+.skills-x-scroll {
+  -webkit-overflow-scrolling: touch;
+}
+
 @media (prefers-reduced-motion: reduce) {
+  .animate-fadein {
+    animation: none;
+    opacity: 1;
+  }
+
   .skills-x-scroll {
     scroll-behavior: auto;
   }
