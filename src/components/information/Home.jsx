@@ -49,7 +49,7 @@ export default function Welcome() {
             GitHub
           </a>
           <a
-            href="https://www.linkedin.com/in/dion-machado"
+            href="https://www.linkedin.com/in/a-random-person-8906713a5/"
             rel="noopener noreferrer"
             target="_blank"
             className="inline-flex min-h-11 items-center transition hover:text-cyan-400"

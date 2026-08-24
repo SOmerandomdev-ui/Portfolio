@@ -57,7 +57,7 @@ const projects = [
     tags: ["HTML5", "CSS3", "Javascript", "React", "Three.js", "Framer-motion"],
     image: 'Portfolio.png',
     github: "https://github.com/SOmerandomdev-ui/Portfolio",
-    live: "https://somerandomdev-ui.github.io/Portfolio/",
+    live: "https://dionmachado-portfolio.vercel.app/",
     kind: "link",
   },
 ];
