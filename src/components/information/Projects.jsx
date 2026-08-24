@@ -9,7 +9,7 @@ const projects = [
     index: "01",
     status: "Shipped",
     description:
-      "MediaPipe hand tracking drives live spell casts from camera gestures — each hand pose fires a different effect.",
+      "MediaPipe hand tracking drives live spell casts from camera gestures. Each hand pose fires a different effect.",
     expandeddescription: `6 different spells were used: a shield spell, fireball, lightning, red orb, black hole, and a reality warp spell.
 
       Mediapipe was imported and used to track hand motions and get the coordinates of each hand.
@@ -29,7 +29,7 @@ const projects = [
     title: "Odin Project",
     index: "02",
     status: "In Progress",
-    description: "Full-stack curriculum builds from plain HTML/CSS through JavaScript and React — nine shipped apps live on Vercel.",
+    description: "Full-stack curriculum builds from plain HTML/CSS through JavaScript and React. Nine shipped apps live on Vercel.",
     expandeddescription: `The odin project is a curriculum that teaches web development from the ground up. From introducing basic HTML, CSS and javascript, to data structures and algorithms, all the way to understanding Node.js, React, and databases.
 
     As well as introducing coding languages, libraries, and frameworks, it also introduces concepts and tools that are frequently by people and companies. These include but are not limited to: Git, Vitest, Webpack, Virtual machines, CLI navgiation 
