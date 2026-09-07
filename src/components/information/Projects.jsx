@@ -54,7 +54,7 @@ const projects = [
     The UI uses glass-style panels over the scene. Framer Motion handles project card animations. The Projects page also includes an Odin Project modal that links to nine live Vercel builds.
 
     Other sections include a horizontally scrollable skills grid on mobile, coursework links on Education, and a Contact page with email copy, GitHub, LinkedIn, and resume download.`,
-    tags: ["HTML5", "CSS3", "Javascript", "React", "Three.js", "Framer-motion"],
+    tags: ["HTML5", "Tailwind", "Javascript", "React", "Three.js", "Framer-motion"],
     image: 'Portfolio.png',
     github: "https://github.com/SOmerandomdev-ui/Portfolio",
     live: "https://dionmachado-portfolio.vercel.app/",
