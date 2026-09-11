@@ -1,5 +1,4 @@
-import { Canvas } from "@react-three/fiber";
-import { Texture, useTexture } from "@react-three/drei";
+import { useTexture } from "@react-three/drei";
 import { useRef } from "react"
 import * as THREE from "three";
 import { useFrame } from "@react-three/fiber";
@@ -10,6 +9,7 @@ export function Planet({position, textureurl, speedx, speedy = 0, size, anglecha
     const localRef = useRef(null);
     const PlanetRef = otherref ?? localRef;
     const angle1 = useRef(0);
+    const orbitRadius = Math.hypot(position[0], position[2]);
 
     //Makes the planet spin and rotate
     useFrame(() => {
@@ -17,21 +17,13 @@ export function Planet({position, textureurl, speedx, speedy = 0, size, anglecha
         PlanetRef.current.rotation.y += speedx;
         PlanetRef.current.rotation.z += speedy;
         angle1.current += 0.5 * anglechange;
-        PlanetRef.current.position.x =
-          Math.cos(angle1.current) *
-          Math.sqrt(position[0] ** 2 + position[2] ** 2);
-        PlanetRef.current.position.z =
-          Math.sin(angle1.current) *
-          Math.sqrt(position[0] ** 2 + position[2] ** 2);
+        PlanetRef.current.position.x = Math.cos(angle1.current) * orbitRadius;
+        PlanetRef.current.position.z = Math.sin(angle1.current) * orbitRadius;
     });
 
     return (
         //Prop that makes a sphere and colors it 
         <>
-            <pointLight 
-                position={[position[0] + 2, position[1] + 2, position[2] + 3]}
-                intensity={19} />
-
             <mesh ref={PlanetRef} 
                 position = {position}>
                 <sphereGeometry args={[size, 32, 32]} />

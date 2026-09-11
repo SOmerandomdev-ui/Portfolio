@@ -55,7 +55,7 @@ const projects = [
 
     Other sections include a horizontally scrollable skills grid on mobile, coursework links on Education, and a Contact page with email copy, GitHub, LinkedIn, and resume download.`,
     tags: ["HTML5", "Tailwind", "Javascript", "React", "Three.js", "Framer-motion"],
-    image: 'Portfolio.png',
+    image: 'Portfolio.webp',
     github: "https://github.com/SOmerandomdev-ui/Portfolio",
     live: "https://dionmachado-portfolio.vercel.app/",
     kind: "link",

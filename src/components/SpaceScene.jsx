@@ -1,5 +1,5 @@
 import { Canvas, useThree, useFrame } from "@react-three/fiber";
-import { useRef, useEffect, useState } from "react";
+import { Suspense, memo, useMemo, useRef, useEffect, useState } from "react";
 import * as THREE from "three";
 import { Stars } from "@react-three/drei";
 import { EffectComposer, Bloom } from "@react-three/postprocessing";
@@ -56,118 +56,119 @@ const Saturn = Planets[7]
 const Uranus = Planets[8]
 const Neptune = Planets[9]
 
+// Scratch objects reused every frame; avoids per-frame Vector3/camera allocations.
+const SPACE_TARGET = new THREE.Vector3(...Space.position);
+const SUN_CAMERA_TARGET = new THREE.Vector3(...Sun.CameraPosition);
+const FAR_X = new THREE.Vector3(10000, 0, 0);
+const ORIGIN = new THREE.Vector3(0, 0, 0);
+const scratchTarget = new THREE.Vector3();
+const scratchMatrix = new THREE.Matrix4();
+const scratchQuat = new THREE.Quaternion();
+
+// Computes the quaternion the camera would have if it looked at `lookTarget`
+// from its current position, without cloning the camera.
+function lookAtQuaternion(camera, lookTarget, out) {
+    scratchMatrix.lookAt(camera.position, lookTarget, camera.up);
+    return out.setFromRotationMatrix(scratchMatrix);
+}
+
 function CameraController({ Place, Refs }) {
     const { camera } = useThree();
-    let target;
-    
+
     useFrame((state, delta) => {
-            if (Place === "Home") {
-            target = new THREE.Vector3(...Space.position)
-            const posAlpha = 1 - Math.exp(-1.2 * delta);
+        let target = null;
 
-            const dummy = camera.clone();
-            dummy.position.copy(camera.position);
-            dummy.lookAt(0, 0, 0);
+        if (Place === "Home") {
+            target = SPACE_TARGET;
             const rotAlpha = 1 - Math.exp(-3 * delta);
-
-            camera.quaternion.slerp(dummy.quaternion, rotAlpha);
-        }  
-        if (Place === "About") {
-            target = new THREE.Vector3(...Sun.CameraPosition);
-
-            const dummy = camera.clone();
-            dummy.position.copy(camera.position);
-            dummy.lookAt(10000, 0, 0);
-            const rotAlpha = 1 - Math.exp(-3 * delta);
-            camera.quaternion.slerp(dummy.quaternion, rotAlpha);
+            camera.quaternion.slerp(lookAtQuaternion(camera, ORIGIN, scratchQuat), rotAlpha);
         }
-
+        else if (Place === "About") {
+            target = SUN_CAMERA_TARGET;
+            const rotAlpha = 1 - Math.exp(-3 * delta);
+            camera.quaternion.slerp(lookAtQuaternion(camera, FAR_X, scratchQuat), rotAlpha);
+        }
         else if (Place === "Projects" && Refs.MercuryRef.current) {
             const position = Refs.MercuryRef.current.position;
-            target = new THREE.Vector3(position.x - 10, 0, position.z + 8.5)
-             camera.lookAt(10000, 0, 0);
+            target = scratchTarget.set(position.x - 10, 0, position.z + 8.5);
+            camera.lookAt(FAR_X);
         }
-
         else if (Place === "Skills" && Refs.VenusRef.current) {
             const position = Refs.VenusRef.current.position;
-            target = new THREE.Vector3(position.x - 15, 0, position.z + 5)
-             camera.lookAt(10000, 0, 0);
+            target = scratchTarget.set(position.x - 15, 0, position.z + 5);
+            camera.lookAt(FAR_X);
         }
-
         else if (Place === "Education" && Refs.EarthRef.current) {
             const position = Refs.EarthRef.current.position;
-            target = new THREE.Vector3(position.x - 10, 0, position.z - 8)
-            camera.lookAt(10000, 0, 0);
+            target = scratchTarget.set(position.x - 10, 0, position.z - 8);
+            camera.lookAt(FAR_X);
         }
-
         else if (Place === "Contact" && Refs.MarsRef.current) {
             const position = Refs.MarsRef.current.position;
-            target = new THREE.Vector3(position.x - 10, 0, position.z - 8)
-            camera.lookAt(10000, 0, 0);
+            target = scratchTarget.set(position.x - 10, 0, position.z - 8);
+            camera.lookAt(FAR_X);
         }
 
         if (!target) return;
 
-        const distance = camera.position.distanceTo(target);
-
-
-        if (distance > 1) {
+        if (camera.position.distanceTo(target) > 1) {
             camera.position.lerp(target, 0.12);
         } else {
             camera.position.copy(target);
-        }   
+        }
     });
 
     return null;
 }
 
-export default function SpaceScene({ Place }) {
-    const MercuryRef = useRef(null);
-    const VenusRef = useRef(null);
-    const EarthRef = useRef(null);
-    const MarsRef = useRef(null);
-
+// Bloom pass is isolated so route changes never re-render it. @react-three/postprocessing
+// re-adds passes whenever its `children` prop identity changes, which is wasteful and
+// crashes if the GL context is ever lost.
+const PostFX = memo(function PostFX() {
     return (
-        <Canvas className="h-full w-full">
-            <VisibilityController />
-            <ambientLight intensity={0.1} />
-            <directionalLight 
-            position={[5, 20, 30]}   
-            intensity={1.5}
-         />
+        <EffectComposer>
+            <Bloom
+                intensity={1.2}
+                luminanceThreshold={0.3}
+                luminanceSmoothing={0.2}
+                mipmapBlur
+            />
+        </EffectComposer>
+    );
+});
+
+// Static scene content. Only CameraController depends on the current route, so the
+// planets, stars, lights and post-processing are memoized and mount exactly once.
+const SceneContent = memo(function SceneContent({ Refs }) {
+    const { MercuryRef, VenusRef, EarthRef, MarsRef } = Refs;
+    return (
+        <>
+            {/* Faint fill so the night side is not pure black. */}
+            <ambientLight intensity={0.02} />
+            {/* Only real light source is the Sun: lights exactly one hemisphere of each planet. */}
+            <pointLight position={[0, 0, 0]} intensity={3} decay={0} />
 
             <Stars
                 radius={250}
                 depth={80}
-                count={6000}
+                count={2500}
                 factor={4}
                 saturation={0}
                 fade
                 speed={2}
             />
-            
+
             <color attach="background" args={["#000107"]} />
 
-            <CameraController Place={Place}
-            Refs={{MercuryRef, VenusRef, EarthRef, MarsRef}}
-            />
-
             {/* All of the planets */}
-            
+
             <SunObject
             size={Sun.size}
             position={Sun.position}
             textureurl={Sun.texture}
             speed={0.001}
             />
-            <EffectComposer>
-                <Bloom
-                    intensity={1.2}
-                    luminanceThreshold={0.3}
-                    luminanceSmoothing={0.2}
-                    mipmapBlur
-                />
-            </EffectComposer>
+            <PostFX />
 
             <Planet
             size={Mercury.size}
@@ -237,8 +238,33 @@ export default function SpaceScene({ Place }) {
             textureurl={Neptune.texture}
             speedx={0.004}
             />
+        </>
+    );
+});
 
+export default function SpaceScene({ Place }) {
+    const MercuryRef = useRef(null);
+    const VenusRef = useRef(null);
+    const EarthRef = useRef(null);
+    const MarsRef = useRef(null);
+    // Stable object so SceneContent's memo never invalidates.
+    const Refs = useMemo(
+        () => ({ MercuryRef, VenusRef, EarthRef, MarsRef }),
+        [],
+    );
 
+    return (
+        <Canvas className="h-full w-full" dpr={[1, 1.5]}>
+            <VisibilityController />
+            <CameraController Place={Place} Refs={Refs} />
+            {/*
+              Suspense must live INSIDE the Canvas. Texture loads suspend here; if this
+              boundary were outside, r3f's Canvas would re-throw the suspension, React
+              would hide/re-mount the canvas and r3f would force-lose the GL context.
+            */}
+            <Suspense fallback={null}>
+                <SceneContent Refs={Refs} />
+            </Suspense>
         </Canvas>
-  );
+    );
 }   
