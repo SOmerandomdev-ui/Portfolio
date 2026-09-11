@@ -121,9 +121,6 @@ function CameraController({ Place, Refs }) {
     return null;
 }
 
-// Bloom pass is isolated so route changes never re-render it. @react-three/postprocessing
-// re-adds passes whenever its `children` prop identity changes, which is wasteful and
-// crashes if the GL context is ever lost.
 const PostFX = memo(function PostFX() {
     return (
         <EffectComposer>
@@ -137,8 +134,7 @@ const PostFX = memo(function PostFX() {
     );
 });
 
-// Static scene content. Only CameraController depends on the current route, so the
-// planets, stars, lights and post-processing are memoized and mount exactly once.
+
 const SceneContent = memo(function SceneContent({ Refs }) {
     const { MercuryRef, VenusRef, EarthRef, MarsRef } = Refs;
     return (
@@ -257,11 +253,6 @@ export default function SpaceScene({ Place }) {
         <Canvas className="h-full w-full" dpr={[1, 1.5]}>
             <VisibilityController />
             <CameraController Place={Place} Refs={Refs} />
-            {/*
-              Suspense must live INSIDE the Canvas. Texture loads suspend here; if this
-              boundary were outside, r3f's Canvas would re-throw the suspension, React
-              would hide/re-mount the canvas and r3f would force-lose the GL context.
-            */}
             <Suspense fallback={null}>
                 <SceneContent Refs={Refs} />
             </Suspense>

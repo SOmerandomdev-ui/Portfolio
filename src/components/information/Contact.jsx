@@ -5,7 +5,7 @@ import { FaGithub, FaLinkedin } from "react-icons/fa";
 const CONTACT = {
   email: "macdion2007@hotmail.com",
   github: "https://github.com/SOmerandomdev-ui",
-  linkedin: "https://www.linkedin.com/in/a-random-person-8906713a5/",
+  linkedin: "https://www.linkedin.com/in/dion-machado-3b46723a5/",
   resume: "/Resume.pdf",
 };
 
